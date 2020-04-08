@@ -1,3 +1,4 @@
 *modules
 dbCreds.json
 *.log
+.env

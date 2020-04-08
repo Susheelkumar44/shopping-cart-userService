@@ -9,4 +9,15 @@ const createUser = (data) => {
     return user.save();
 }
 
-module.exports = {createUser}
+const getUserDetailsForLogin = (email) => {
+    userDetails = User.findOne({email: email, IsDeleted : false})
+    return userDetails
+}
+
+const updateUserQuery = (userid, data) => {
+    const id = mongoose.Types.ObjectId(userid)
+    updateData = User.updateOne({_id : id}, {$set: data})
+    return updateData
+}
+
+module.exports = {createUser, getUserDetailsForLogin, updateUserQuery}
