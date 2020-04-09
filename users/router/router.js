@@ -10,8 +10,10 @@ router.post("/", controller.registerUser)
 
 router.post("/login", controller.loginUser)
 
-router.put("/:id", authenticator.authenticateToken, controller.updateUser)
+router.put("/", controller.updateUser)
 
-router.get("/", authenticator.authenticateToken, controller.getUser)
+router.get("/", controller.getUser)
+
+router.delete("/", controller.deleteUser)
 
 module.exports = router

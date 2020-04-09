@@ -20,4 +20,17 @@ const updateUserQuery = (userid, data) => {
     return updateData
 }
 
-module.exports = {createUser, getUserDetailsForLogin, updateUserQuery}
+const getUserByID = (userid) => {
+    console.log("userID before object is ", userid)
+    const id = mongoose.Types.ObjectId(userid)
+    console.log("ID is ", id)
+    const userDetails = User.findOne({_id: id, IsDeleted: false}, {"encryptedPassword": 0, "IsDeleted" : 0})
+    return userDetails
+}
+
+const deleteUserByID =(userid) => {
+    const id = mongoose.Types.ObjectId(userid)
+    return User.updateOne({_id : id}, {IsDeleted : true})
+}
+
+module.exports = {createUser, getUserDetailsForLogin, updateUserQuery, getUserByID, deleteUserByID}

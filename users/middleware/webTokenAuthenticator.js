@@ -11,7 +11,7 @@ exports.authenticateToken =  (req, res, next) => {
     /*authHeader.split(' ')[1] -- authHeader will be like: Bearer <Token>, so we need separate Bearer keyword from 
     <Token> and we want only <Token> so we split and access 2nd value of an array*/
 
-    const token = authHeader && authHeader.split(' ')[1]
+    const token = authHeader && authHeader.split(' ')[0]
 
     if (token == null) return res.status(401).json({code: 401, type: httpStatus.getStatusText(401), 
         message:"You are not authorized to perform this action"})
@@ -25,14 +25,18 @@ exports.authenticateToken =  (req, res, next) => {
 
 }
 
+//getUserDetails
 exports.getUserDetailsFromToken = (authHeader) => {
         const token = authHeader && authHeader.split(' ')[1]
-        if (token) {
+        if (token == null) throw "No token present"
+       
            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-               if (err) throw err
+               if (err) {
+                    logger.info(`Error in verifying token and Error is: ${err}`);
+                    throw err
+                }
                tokenDetails = user
                console.log(tokenDetails)
            })
-        }
     return tokenDetails
 }
