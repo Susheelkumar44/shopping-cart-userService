@@ -1,6 +1,7 @@
 const repository = require("../dbRepo/repository")
 const httpStatus = require("http-status-codes")
 const bcrypt = require('bcrypt')
+const request = require("request")
 const jwt = require('jsonwebtoken')
 const authenticator = require("../middleware/webTokenAuthenticator")
 
@@ -15,6 +16,29 @@ exports.registerUser = async (req, res) => {
             'Content-Type': 'application/json',
             'Status' : 201
         })
+        request.post(
+            'http://localhost:1236/cart',
+            {
+              json: {
+                userID : savedUser._id,
+                grandTotal: 0,
+                products : [{
+                    productID: "",
+                    quantity: 0,
+                    subTotal: 0,
+                    productName: ""
+                }]
+              }
+            },
+            (error, res, body) => {
+                if (error) {
+                  console.error(error)
+                  return
+                }
+                console.log(`statusCode: ${res.statusCode}`)
+                console.log(body)
+            }
+        )
         res.send({"code": 201, "type":httpStatus.getStatusText(201), 
         "message":"Successfull Operation", "productID": savedUser._id })
     } catch(err) {
